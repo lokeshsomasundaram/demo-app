@@ -1,14 +1,10 @@
-# Use Python slim image
-FROM python:3.11-slim
+# Use official nginx image
+FROM nginx:alpine
 
-# Set working directory
-WORKDIR /app
-
-# Copy HTML file
-COPY index.html /app
+# Copy your HTML file into nginx default location
+COPY index.html /usr/share/nginx/html/index.html
 
 # Expose port 80
 EXPOSE 80
 
-# Use Python's simple HTTP server to serve HTML
-CMD ["python", "-m", "http.server", "80"]
+# Start nginx (already the default CMD)
