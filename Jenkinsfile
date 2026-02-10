@@ -10,14 +10,12 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                echo 'Checking out code from GitHub...'
                 git branch: 'main', url: 'https://github.com/lokeshsomasundaram/demo-app.git'
             }
         }
 
         stage('Cleanup Old Containers') {
             steps {
-                echo 'Stopping and removing old containers...'
                 sh '''
                 if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
                     docker stop $CONTAINER_NAME
@@ -34,7 +32,10 @@ pipeline {
             steps {
                 script {
                     env.HOST_PORT = sh(
-                        script: "comm -23 <(seq 8080 8100) <(docker ps --format '{{.Ports}}' | awk -F '->' '{print $1}' | sed 's/.*://') | head -n 1",
+                        script: '''
+                        comm -23 <(seq 8080 8100) \
+                        <(docker ps --format '{{.Ports}}' | awk -F '->' '{print $1}' | sed 's/.*://') | head -n 1
+                        ''',
                         returnStdout: true
                     ).trim()
                     echo "Selected free port: ${env.HOST_PORT}"
@@ -44,14 +45,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
                 sh 'docker build -t $IMAGE_NAME:latest .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                echo "Running Docker container on port ${env.HOST_PORT}..."
                 sh '''
                 docker run -d \
                     --name $CONTAINER_NAME \
@@ -63,8 +62,8 @@ pipeline {
 
         stage('Verify') {
             steps {
-                echo "Docker container $CONTAINER_NAME is now running on port $HOST_PORT"
                 sh 'docker ps'
+                echo "Docker container $CONTAINER_NAME is running on port ${env.HOST_PORT}"
             }
         }
     }
