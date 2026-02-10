@@ -1,10 +1,10 @@
 from flask import Flask
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def hello():
-    return "Hello from Flask on Docker!"
+    return "Hello World!"
 
-if __name__ == '__main__':
-    # Bind to all interfaces, port 80
-    app.run(host='0.0.0.0', port=80)
+if __name__ == "__main__":
+    # Listen on all interfaces so Docker can map the port
+    app.run(host="0.0.0.0", port=80)
