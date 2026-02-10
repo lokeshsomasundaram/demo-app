@@ -1,17 +1,17 @@
-# Use official Python 3.11 slim image
+# Use Python slim image
 FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy app
+# Copy application code
 COPY app.py /app
 
 # Install Flask
 RUN pip install --no-cache-dir flask
 
-# Expose container port 80
+# Expose port 80
 EXPOSE 80
 
-# Run the Flask app
+# Command to run the app
 CMD ["python", "app.py"]
