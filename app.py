@@ -1,11 +1,10 @@
 from flask import Flask
-
 app = Flask(__name__)
 
 @app.route('/')
-def home():
-    return "Hello from Docker + Jenkins CI/CD!"
+def hello():
+    return "Hello from Flask on Docker!"
 
 if __name__ == '__main__':
-    # Listen on all interfaces, port 80
+    # Bind to all interfaces, port 80
     app.run(host='0.0.0.0', port=80)
