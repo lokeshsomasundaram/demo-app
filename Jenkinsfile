@@ -73,7 +73,6 @@ pipeline {
                 script {
                     sh """
                     FREE_PORT=\$(cat free_port.txt)
-                    # curl inside the app container to avoid Docker network issue
                     docker exec ${CONTAINER_NAME} curl -f http://localhost:80
                     echo Verification successful!
                     """
